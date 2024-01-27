@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Team(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    players = models.ManyToManyField(Player, validators=[MinValueValidator(2), MaxValueValidator(5)])
+    players = models.ManyToManyField(Player)
 
     def __str__(self):
         return f'Team {self.name} - {", ".join(player.nickname for player in self.players.all())}'

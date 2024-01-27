@@ -1,6 +1,13 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark p-md-3">
     <div class="container">
-        <a class="navbar-brand" href="#">Web Zone</a>
+        <a class="navbar-brand">
+            Hello
+            {% if user.is_authenticated %} {{ user.username }} !
+                {#            <a href="{% url 'logout' %}">Wyloguj się</a>#}
+            {% else %}
+                {#            <a href="{% url 'login' %}">Zaloguj się</a>#}
+            {% endif %}
+        </a>
         <button
                 class="navbar-toggler"
                 type="button"
@@ -17,20 +24,41 @@
             <div class="mx-auto"></div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Home</a>
+                    <a class="nav-link text-white" style="margin: 0 20px; font-size: 16px; font-weight: bolder"
+                       href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">About</a>
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Games</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Blog</a>
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Add Games</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Pricing</a>
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Players</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="#">Contact</a>
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Add Players</a>
                 </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Tanks</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Add Tanks</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Clans</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" style="margin: 0 20px" href="#">Add Clans</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

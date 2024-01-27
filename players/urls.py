@@ -18,4 +18,6 @@ Including another URLconf
 from django.urls import path
 from players import views
 
-# urlpatterns = []
+urlpatterns = [
+    path('players/', views.ListPlayersView.as_view(), name='players_list'),
+]

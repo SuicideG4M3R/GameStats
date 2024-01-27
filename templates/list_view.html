@@ -1,0 +1,10 @@
+{% extends 'home.html' %}
+{% block content %}
+    {% if form %}
+        <form>
+            {{ form.as_p }}
+            <input type="submit" value="filtruj">
+        </form>
+    {% endif %}
+    {% include 'list.html' %}
+{% endblock %}

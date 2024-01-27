@@ -16,6 +16,8 @@ Including another URLconf
 """
 
 from django.urls import path
-from games import views
+from logged import views
 
-# urlpatterns = []
+urlpatterns = [
+    path('a/', views.SomethingView.as_view(), name='something'),
+]

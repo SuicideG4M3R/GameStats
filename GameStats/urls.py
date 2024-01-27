@@ -20,7 +20,7 @@ from players import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.HomeView.as_view(), name='index'),
-    # path('players/', include('players.urls')),
-    # path('games/', include('games.urls')),
+    path('', views.HomeView.as_view(), name='home'),
+    path('', include('players.urls')),
+    path('', include('logged.urls')),
 ]

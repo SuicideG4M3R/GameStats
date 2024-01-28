@@ -1,0 +1,49 @@
+/*body{*/
+/*    margin: 0;*/
+/*    background-color: #a9aab1;*/
+/*}*/
+/*main{*/
+/*    margin: 10%;*/
+/*    border: solid 5px black;*/
+/*    background-color: orange;*/
+/*    align-content: center;*/
+/*    background-image: url('/static/img/img4.png');*/
+/*    background-position: center;*/
+/*    background-size: cover;*/
+/*    padding: 20%;*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*}*/
+/*h1{*/
+/*    text-align: center;*/
+/*}*/
+/*.navbar ul{*/
+/*    list-style-type: none;*/
+/*    background-color: midnightblue;*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*    overflow: hidden;*/
+/*    background-image: url('/static/img/img2.jpg');*/
+/*    background-size: cover;*/
+
+/*}*/
+/*.navbar a{*/
+/*    color: white;*/
+/*    text-decoration: none;*/
+/*    padding: 15px;*/
+/*    display: block;*/
+/*    text-align: center;*/
+/*}*/
+/*.navbar a:hover{*/
+/*    background-color: firebrick;*/
+/*}*/
+/*.navbar li{*/
+/*    float: left;*/
+/*    border-right: 2px solid black;*/
+/*}*/
+/*.background-image {*/
+/*    background-image: url('/static/img/img3.jpg');*/
+/*    background-position: center;*/
+/*    background-size: cover;*/
+/*    padding: 20px;*/
+/*}*/

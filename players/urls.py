@@ -20,4 +20,8 @@ from players import views
 
 urlpatterns = [
     path('players/', views.ListPlayersView.as_view(), name='players_list'),
+    path('games/', views.ListGamesView.as_view(), name='games_list'),
+    path('clans/', views.ListClansView.as_view(), name='clans_list'),
+    path('tanks/', views.ListTanksView.as_view(), name='tanks_list'),
+    path('teams/', views.ListTeamsView.as_view(), name='teams_list'),
 ]

@@ -19,5 +19,6 @@ from django.urls import path
 from logged import views
 
 urlpatterns = [
-    path('a/', views.SomethingView.as_view(), name='something'),
+    path('login/', views.LoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
 ]

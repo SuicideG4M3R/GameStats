@@ -1,0 +1,5 @@
+<ul class="navbar-nav">
+    {% for obj in object_list %}
+        <li class="nav-item"><a class="nav-link text-warning" style="font-size: x-large" href="{{ obj.get_absolute_url }}"> {{ obj }}</a></li>
+    {% endfor %}
+</ul>

@@ -31,7 +31,7 @@ class Tank(models.Model):
     tier = models.IntegerField(null=False, validators=[MinValueValidator(1), MaxValueValidator(10)])
 
     def __str__(self):
-        return f'{self.name} - {self.tier}'
+        return f'Tank: {self.name} - {self.tier} tier {self.nation}'
 
 
 class Player(models.Model):
@@ -40,8 +40,8 @@ class Player(models.Model):
     tanks = models.ManyToManyField(Tank, through='PlayerTank')
 
     def __str__(self):
-        clan_name = self.clan.name if self.clan else 'No clan'
-        return f'{self.nickname} - {clan_name}'
+        clan_name = self.clan.name if self.clan else 'No Clan'
+        return f'{self.nickname} [{clan_name}]'
 
 
 class PlayerTank(models.Model):
@@ -50,3 +50,37 @@ class PlayerTank(models.Model):
 
     def __str__(self):
         return f'{self.player.nickname} - {self.tank.name}'
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    players = models.ManyToManyField(Player)
+
+    def __str__(self):
+        return f'Team {self.name} - {", ".join(player.nickname for player in self.players.all())}'
+
+
+class Game(models.Model):
+    date_played = models.DateTimeField(auto_now_add=True)
+    team1 = models.ForeignKey(Team, related_name='team1', on_delete=models.CASCADE)
+    team2 = models.ForeignKey(Team, related_name='team2', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Game {self.id} - {self.date_played}'
+
+
+class GameResult(models.Model):
+    game = models.OneToOneField(Game, on_delete=models.CASCADE)
+    winner_team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        team1_name = self.game.team1.name if self.game.team1 else 'Team 1'
+        team2_name = self.game.team2.name if self.game.team2 else 'Team 2'
+
+        result_str = f'{team1_name} vs {team2_name}'
+
+        if self.winner_team:
+            winner_name = self.winner_team.name
+            result_str += f' --> {winner_name}'
+
+        return result_str

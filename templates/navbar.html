@@ -31,7 +31,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Add Games</a>
+                        <a class="nav-link text-warning" href="{% url 'games_list' %}">Add Games</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -39,7 +39,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Add Players</a>
+                        <a class="nav-link text-warning" href="{% url 'add_players' %}">Add Players</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -47,7 +47,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Add Tanks</a>
+                        <a class="nav-link text-warning" href="{% url 'add_tanks' %}">Add Tanks</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -55,7 +55,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Add Clans</a>
+                        <a class="nav-link text-warning" href="{% url 'add_clans' %}">Add Clans</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">
@@ -63,7 +63,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="#">Add Teams</a>
+                        <a class="nav-link text-warning" href="{% url 'add_teams' %}">Add Teams</a>
                     </li>
                 {% endif %}
             </ul>

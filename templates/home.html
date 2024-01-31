@@ -18,11 +18,9 @@
 <body class="background-image">
 {% include 'navbar.html' %}
 <main>
-    <div
-            class="banner-image w-100 vh-100 d-flex justify-content-center align-items-center"
-    >
+    <div class="banner-image w-100 vh-100 d-flex justify-content-center align-items-center">
         <div class="content text-center text-white">
-            {% block content %}
+            {% block form %}
                 <h1>Hi there!</h1>
                 <p>That's my first Django Project, hope you like it :)</p>
                 <p>Enjoy!</p>
@@ -31,48 +29,10 @@
     </div>
 
     <!-- Main Content Area -->
-    <div class="container my-5 d-grid gap-5">
-        <div class="p-5 border">
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Necessitatibus veniam ipsa earum quibusdam, atque ipsum error maiores
-                natus iusto fugit id saepe neque rerum magni laudantium accusantium
-                dolorem numquam quasi.
-            </p>
-        </div>
-        {#      <div class="p-5 border">#}
-        {#        <p>#}
-        {#          Lorem ipsum dolor sit amet consectetur adipisicing elit.#}
-        {#          Necessitatibus veniam ipsa earum quibusdam, atque ipsum error maiores#}
-        {#          natus iusto fugit id saepe neque rerum magni laudantium accusantium#}
-        {#          dolorem numquam quasi.#}
-        {#        </p>#}
-        {#      </div>#}
-        {#      <div class="p-5 border">#}
-        {#        <p>#}
-        {#          Lorem ipsum dolor sit amet consectetur adipisicing elit.#}
-        {#          Necessitatibus veniam ipsa earum quibusdam, atque ipsum error maiores#}
-        {#          natus iusto fugit id saepe neque rerum magni laudantium accusantium#}
-        {#          dolorem numquam quasi.#}
-        {#        </p>#}
-        {#      </div>#}
-        {#      <div class="p-5 border">#}
-        {#        <p>#}
-        {#          Lorem ipsum dolor sit amet consectetur adipisicing elit.#}
-        {#          Necessitatibus veniam ipsa earum quibusdam, atque ipsum error maiores#}
-        {#          natus iusto fugit id saepe neque rerum magni laudantium accusantium#}
-        {#          dolorem numquam quasi.#}
-        {#        </p>#}
-        {#      </div>#}
-        {#      <div class="p-5 border">#}
-        {#        <p>#}
-        {#          Lorem ipsum dolor sit amet consectetur adipisicing elit.#}
-        {#          Necessitatibus veniam ipsa earum quibusdam, atque ipsum error maiores#}
-        {#          natus iusto fugit id saepe neque rerum magni laudantium accusantium#}
-        {#          dolorem numquam quasi. df#}
-        {#        </p>#}
-        {#      </div>#}
-    </div>
+    {% block content %}
+    {% endblock %}
+    <!-- End Of Main Content Area -->
+
 </main>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script type="text/javascript">

@@ -18,7 +18,7 @@ class Clan(models.Model):
     #     return reverse('clan_detail', args=(self.id,))
 
     def __str__(self):
-        return f"{self.name} - {self.description}"
+        return self.name
 
 
 class TankType(models.Model):
@@ -70,7 +70,7 @@ class Team(models.Model):
     #     return reverse('team_detail', args=(self.id,))
 
     def __str__(self):
-        return f'Team {self.name} - {", ".join(player.nickname for player in self.players.all())}'
+        return f'{self.name} - {", ".join(player.nickname for player in self.players.all())}'
 
 
 class Game(models.Model):

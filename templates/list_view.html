@@ -1,10 +1,15 @@
 {% extends 'home.html' %}
 {% block content %}
-    {% if form %}
-        <form>
-            {{ form.as_p }}
-            <input type="submit" value="filtruj">
-        </form>
-    {% endif %}
-    {% include 'list.html' %}
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border" id="anchor">
+            <p>
+                {% if form %}
+                    <form>
+                        {{ form.as_p }}
+                        <input type="submit" value="filtruj">
+                    </form>
+                {% endif %}
+            {% include 'list.html' %}
+        </div>
+    </div>
 {% endblock %}

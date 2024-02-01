@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 
 
 class Nation(models.Model):
@@ -13,8 +14,11 @@ class Clan(models.Model):
     name = models.CharField(max_length=50, null=False, unique=True)
     description = models.CharField(max_length=255, null=True, blank=True)
 
+    # def get_absolute_url(self):
+    #     return reverse('clan_detail', args=(self.id,))
+
     def __str__(self):
-        return f"{self.name} - {self.description}"
+        return self.name
 
 
 class TankType(models.Model):
@@ -30,6 +34,9 @@ class Tank(models.Model):
     type = models.ForeignKey(TankType, on_delete=models.CASCADE)
     tier = models.IntegerField(null=False, validators=[MinValueValidator(1), MaxValueValidator(10)])
 
+    # def get_absolute_url(self):
+    #     return reverse('tank_detail', args=(self.id,))
+
     def __str__(self):
         return f'Tank: {self.name} - {self.tier} tier {self.nation}'
 
@@ -38,6 +45,9 @@ class Player(models.Model):
     nickname = models.CharField(max_length=255, null=False, unique=True)
     clan = models.ForeignKey(Clan, on_delete=models.SET_NULL, null=True, blank=True)
     tanks = models.ManyToManyField(Tank, through='PlayerTank')
+
+    # def get_absolute_url(self):
+    #     return reverse('player_detail', args=(self.id,))
 
     def __str__(self):
         clan_name = self.clan.name if self.clan else 'No Clan'
@@ -56,8 +66,11 @@ class Team(models.Model):
     name = models.CharField(max_length=255, unique=True)
     players = models.ManyToManyField(Player)
 
+    # def get_absolute_url(self):
+    #     return reverse('team_detail', args=(self.id,))
+
     def __str__(self):
-        return f'Team {self.name} - {", ".join(player.nickname for player in self.players.all())}'
+        return f'{self.name} - {", ".join(player.nickname for player in self.players.all())}'
 
 
 class Game(models.Model):
@@ -73,11 +86,14 @@ class GameResult(models.Model):
     game = models.OneToOneField(Game, on_delete=models.CASCADE)
     winner_team = models.ForeignKey(Team, null=True, blank=True, on_delete=models.SET_NULL)
 
+    # def get_absolute_url(self):
+    #     return reverse('game_detail', args=(self.id,))
+
     def __str__(self):
         team1_name = self.game.team1.name if self.game.team1 else 'Team 1'
         team2_name = self.game.team2.name if self.game.team2 else 'Team 2'
 
-        result_str = f'{team1_name} vs {team2_name}'
+        result_str = f'{self.game.date_played.date()} {team1_name} vs {team2_name}'
 
         if self.winner_team:
             winner_name = self.winner_team.name

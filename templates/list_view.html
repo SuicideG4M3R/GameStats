@@ -1,10 +1,35 @@
 {% extends 'home.html' %}
 {% block content %}
-    {% if form %}
-        <form>
-            {{ form.as_p }}
-            <input type="submit" value="filtruj">
-        </form>
-    {% endif %}
-    {% include 'list.html' %}
+    <div class="container my-5 d-grid gap-5">
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const targetAnchor = document.getElementById('mydata');
+    if (targetAnchor) {
+        targetAnchor.scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+});
+    </script>
+        <div class="p-5 border">
+            <p>
+                {% if form %}
+                    <form>
+
+                        <p><h5 class="text-danger fs-lg-4">Search {{ form.form_name }}</h5></p>
+                        {{ form.as_p }}
+                        <input type="submit" value="search">
+                        <p><h5 class="text-danger">
+                        {% if object_list.count == 1 %}
+                            Found: {{ object_list.count }} {{ form.form_name }}
+                        {% else %}
+                            Found: {{ object_list.count }} {{ form.form_name }}s
+                            {% endif %}
+
+                    </h5></p>
+                    </form>
+                {% endif %}
+            {% include 'list.html' %}
+        </div>
+    </div>
 {% endblock %}

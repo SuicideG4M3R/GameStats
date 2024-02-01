@@ -1,9 +1,10 @@
 {% extends 'home.html' %}
-{% block content %}
+{% block main_page %}
     <form method="post">
         {% csrf_token %}
+        <p><h5 class="text-warning">{{ form.form_name }}</h5></p>
         {{ form.as_p }}
-        <input type="submit">
+        <input type="submit" value="Submit">
     </form>
 {#    <ul>#}
 {#        {%  for g in groups %}#}

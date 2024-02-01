@@ -28,13 +28,13 @@
                 {% else %}
                     <h1>Hi there!</h1>
                     <p>That's my first Django Project, hope you like it :)</p>
+                    <p>First registered user will be SUPER user!</p>
                     <p>Enjoy!</p>
                 {% endif %}
             {% endblock %}
         </div>
-
     </div>
-
+    <div id="mydata"></div>
     <!-- Main Content Area -->
     {% block content %}
     {% endblock %}
@@ -43,7 +43,7 @@
 </main>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script type="text/javascript">
-    var nav = document.querySelector('nav');
+    const nav = document.querySelector('nav');
 
     window.addEventListener('scroll', function () {
         if (window.pageYOffset > 100) {

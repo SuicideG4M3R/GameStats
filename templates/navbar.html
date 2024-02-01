@@ -3,8 +3,12 @@
         <p class="navbar-brand">
             {% if user.is_authenticated %} Hello  {{ user.username }}  !
                 <a class="navbar-brand text-warning " style="margin: 0 40px" href="{% url 'logout' %}">Logout</a>
+                {% if user.is_superuser %}
+                <a class="navbar-brand text-warning " href="#">Administrate</a>
+                {% endif %}
             {% else %}
                 <a class="navbar-brand text-warning" href="{% url 'login' %}">Login</a>
+                <a class="navbar-brand text-warning" href="{% url 'register' %}">Register</a>
             {% endif %}
         </p>
         <button
@@ -31,7 +35,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="{% url 'games_list' %}">Add Games</a>
+                        <a class="nav-link text-warning" href="{% url 'add_games' %}">Add Games</a>
                     </li>
                 {% endif %}
                 <li class="nav-item">

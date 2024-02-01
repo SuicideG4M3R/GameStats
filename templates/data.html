@@ -9,37 +9,33 @@
     {#    <link rel="stylesheet" href="{% static 'css/style.css' %}">#}
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}"/>
     <style>
-        .banner-image {
+        main {
+            overflow: scroll;
+        }
+
+        body {
             background-image: url('{% static "img/img2.jpg" %}');
             background-size: cover;
         }
+        nav {
+            position: relative;
+            top: 0;
+            z-index: 100;
+        }
     </style>
 </head>
-<body class="background-image">
+<body class="background-image" style="overflow: hidden">
 {% include 'navbar.html' %}
 <main>
-    <div class="banner-image w-100 vh-100 d-flex justify-content-center align-items-center">
+    <div class="banner-image w-100 vh-100 d-flex justify-content-center"
+         style="
+         padding: 70px 0;
+">
         <div class="content text-center text-white">
-            {% block main_page %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <p class="text-success fw-bold" style="font-size: x-large">{{ message }}</p>
-                    {% endfor %}
-                {% else %}
-                    <h1>Hi there!</h1>
-                    <p>That's my first Django Project, hope you like it :)</p>
-                    <p>Enjoy!</p>
-                {% endif %}
+            {% block content %}
             {% endblock %}
         </div>
-
     </div>
-
-    <!-- Main Content Area -->
-    {% block content %}
-    {% endblock %}
-    <!-- End Of Main Content Area -->
-
 </main>
 <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <script type="text/javascript">

@@ -109,12 +109,10 @@ class AddTeamsForm(forms.Form):
     player4 = forms.ModelChoiceField(queryset=players, label='Player 4')
     player5 = forms.ModelChoiceField(queryset=players, label='Player 5')
 
-    team_name_duplicate_error = 'Team with this name already exists'
-
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Team.objects.filter(name=name).exists():
-            raise ValidationError(self.team_name_duplicate_error)
+            raise ValidationError('Team with this name already exists')
         return name
 
     def clean(self):

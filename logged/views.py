@@ -1,12 +1,12 @@
 import random
 from datetime import datetime
-
+from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth import logout, authenticate, login
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin, UserPassesTestMixin
 from django.db import IntegrityError
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
 from logged.forms import *
@@ -49,12 +49,22 @@ class RegisterView(View):
             password = form.cleaned_data.get('password')
             if User.objects.all().count() == 0:
                 user = User.objects.create_superuser(username=username, password=password)
-                login(request, user)
                 messages.success(request, f'Successfully created SUPER user: {username}')
             else:
                 user = User.objects.create_user(username=username, password=password)
-                login(request, user)
                 messages.success(request, f'Successfully created user: {username}')
+
+                ################################
+                if not Group.objects.filter(name='New user').exists():
+                    group = Group.objects.create(name='New user')
+                    group.permissions.set(Permission.objects.all())  # NEW USER GROUP AND PERMISSIONS
+                    user.groups.add(group)
+                else:
+                    group = Group.objects.get(name='New user')
+                    user.groups.add(group)
+                ################################
+
+            login(request, user)
             return redirect('home')
         return render(request, 'add_form.html', {'form': form})
 
@@ -78,7 +88,8 @@ class AddGamesView(PermissionRequiredMixin, View):
                 winner = team2
             game = Game.objects.create(team1=team1, team2=team2)
             GameResult.objects.create(winner_team=winner, game=game)
-            messages.success(request, f'Added game between team: {team1.name} vs team: {team2.name} --> Winner! {winner.name}')
+            messages.success(request,
+                             f'Added game between team: {team1.name} vs team: {team2.name} --> Winner! {winner.name}')
             return redirect('home')
         return render(request, 'add_form.html', {'form': form})
 
@@ -102,7 +113,7 @@ class AddPlayersView(PermissionRequiredMixin, View):
 
 
 class AddClansView(PermissionRequiredMixin, View):
-    permission_required = ['players.add_clans']
+    permission_required = ['players.add_clan']
 
     def get(self, request):
         form = AddClanForm()
@@ -222,3 +233,103 @@ class AddBasicDataView(UserPassesTestMixin, View):
 
         messages.success(request, f'Added basic data in amount of {amount} units.')
         return redirect('home')
+
+
+class GameDetailView(View):
+    def get(self, request, id):
+        if Game.objects.filter(id=id).exists():
+            game = get_object_or_404(Game, id=id)
+            game_result = get_object_or_404(GameResult, id=game.id)
+            context = {
+                'Game id': game.id,
+                'Played': game.date_played,
+                'Team 1': game.team1,
+                'Team 2': game.team2,
+                'Winner': game_result.winner_team
+            }
+            return render(request, 'detail_view.html', {'context': context})
+        else:
+            messages.error(request, f'Game with ID: {id} does not exist')
+            return redirect('home')
+
+
+class PlayerDetailView(View):
+    def get(self, request, id):
+        if Player.objects.filter(id=id).exists():
+            player = get_object_or_404(Player, id=id)
+            if PlayerTank.objects.filter(player=player).count() == 0:
+                tanks = 'None'
+            else:
+                tanks = []
+                for tank in PlayerTank.objects.filter(player=player):
+                    name = f'Tank {tank.tank.name}'
+                    tanks.append(name)
+            if Team.objects.filter(players=player).count() == 0:
+                team_list = 'None'
+            else:
+                team_list = []
+                for team in Team.objects.filter(players=player):
+                    name = f'Team {team.name}'
+                    team_list.append(name)
+
+            context = {
+                'Player ID': player.id,
+                'Nickname': player.nickname,
+                'Clan': player.clan,
+                'Teams': team_list,
+                'Tanks': tanks,
+            }
+            return render(request, 'detail_view.html', {'context': context})
+        else:
+            messages.error(request, f'Player with ID: {id} does not exist')
+            return redirect('home')
+
+
+class ClanDetailView(View):
+    def get(self, request, id):
+        if Clan.objects.filter(id=id).exists():
+            clan = get_object_or_404(Clan, id=id)
+            context = {
+                'Clan ID': clan.id,
+                'Name': clan.name,
+                'Description': clan.description
+            }
+            return render(request, 'detail_view.html', {'context': context})
+        else:
+            messages.error(request, f'Clan with ID: {id} does not exist')
+            return redirect('home')
+
+
+class TankDetailView(View):
+    def get(self, request, id):
+        if Tank.objects.filter(id=id).exists():
+            tank = get_object_or_404(Tank, id=id)
+            context = {
+                'Tank ID': tank.id,
+                'Name': tank.name,
+                'Tier': tank.tier,
+                'Nation': tank.nation,
+                'Type': tank.type
+            }
+            return render(request, 'detail_view.html', {'context': context})
+        else:
+            messages.error(request, f'Tank with ID: {id} does not exist')
+            return redirect('home')
+
+
+class TeamDetailView(View):
+    def get(self, request, id):
+        if Team.objects.filter(id=id).exists():
+            team = get_object_or_404(Team, id=id)
+            players = []
+            for player in team.players.all():
+                players.append(player.nickname)
+            context = {
+                'Team ID': team.id,
+                'Name': team.name,
+                'Players': players
+            }
+            return render(request, 'detail_view.html', {'context': context})
+        else:
+            messages.error(request, f'Team with ID: {id} does not exist')
+            return redirect('home')

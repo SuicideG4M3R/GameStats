@@ -1,0 +1,9 @@
+{% extends 'home.html' %}
+{% block main_page %}
+    {% for key, value in context.items %}
+        <p class="fw-bold text-warning" style="font-size: x-large">{{ key }}: {{ value }}</p>
+    {% endfor %}
+{#    {% if 'Tanks' in context.keys %}#}
+{#        #}
+{#    {% endif %}#}
+{% endblock %}

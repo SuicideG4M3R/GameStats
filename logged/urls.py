@@ -27,11 +27,6 @@ urlpatterns = [
     path('addClans/', views.AddClansView.as_view(), name='add_clans'),
     path('addTanks/', views.AddTanksView.as_view(), name='add_tanks'),
     path('addTeams/', views.AddTeamsView.as_view(), name='add_teams'),
-    path('game/<int:id>/', views.GameDetailView.as_view(), name='game_detail'),
-    path('player/<int:id>/', views.PlayerDetailView.as_view(), name='player_detail'),
-    path('clan/<int:id>/', views.ClanDetailView.as_view(), name='clan_detail'),
-    path('tank/<int:id>/', views.TankDetailView.as_view(), name='tank_detail'),
-    path('team/<int:id>/', views.TeamDetailView.as_view(), name='team_detail'),
 
     path('addBasicData/<int:amount>/', views.AddBasicDataView.as_view(), name='admin_base_data'),  # ADDS BASIC DATA PRE-GENERATED
 

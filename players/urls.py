@@ -24,4 +24,11 @@ urlpatterns = [
     path('clans/', views.ListClansView.as_view(), name='clans_list'),
     path('tanks/', views.ListTanksView.as_view(), name='tanks_list'),
     path('teams/', views.ListTeamsView.as_view(), name='teams_list'),
+
+    path('game/<int:id>/', views.GameDetailView.as_view(), name='game_detail'),
+    path('player/<int:id>/', views.PlayerDetailView.as_view(), name='player_detail'),
+    path('clan/<int:id>/', views.ClanDetailView.as_view(), name='clan_detail'),
+    path('tank/<int:id>/', views.TankDetailView.as_view(), name='tank_detail'),
+    path('team/<int:id>/', views.TeamDetailView.as_view(), name='team_detail'),
+
 ]

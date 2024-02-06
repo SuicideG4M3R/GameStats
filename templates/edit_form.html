@@ -15,9 +15,17 @@
             {% for key, value in context.items %}
                 <p>{{ key }}: {{ value }}</p>
             {% endfor %}
-        <a class="btn btn-primary" href="edit/">Edit</a>
-        <a class="btn btn-danger" href="delete/">Delete</a>
+        </div>
+    </div>
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border">
+            <form method="post">
+                {% csrf_token %}
+                <p><h5 class="text-warning">Edit</h5></p>
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-success">
+                <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
+            </form>
         </div>
     </div>
 {% endblock %}
-

@@ -131,7 +131,7 @@ class AddTeamsForm(forms.Form):
 class AddClanForm(forms.Form):
     form_name = 'Add New Clan'
     name = forms.CharField(max_length=50, min_length=3, required=True)
-    description = forms.CharField(max_length=255, required=False)
+    description = forms.CharField(max_length=255, required=False, widget=forms.Textarea(attrs={'cols': 40, 'rows': 4}))
 
     def clean_name(self):
         name = self.cleaned_data.get('name')

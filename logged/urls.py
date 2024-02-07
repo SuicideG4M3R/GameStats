@@ -25,6 +25,7 @@ urlpatterns = [
 
     path('addGames/', views.AddGamesView.as_view(), name='add_games'),
     path('addPlayers/', views.AddPlayersView.as_view(), name='add_players'),
+    path('player/<int:id>/add-tank/', views.AddTankToPlayerView.as_view(), name='add_tank_to_player'),
     path('addClans/', views.AddClansView.as_view(), name='add_clans'),
     path('addTanks/', views.AddTanksView.as_view(), name='add_tanks'),
     path('addTeams/', views.AddTeamsView.as_view(), name='add_teams'),
@@ -41,6 +42,7 @@ urlpatterns = [
     path('tank/<int:id>/delete/', views.DeleteTankView.as_view(), name='delete_tank'),
     path('team/<int:id>/delete/', views.DeleteTeamView.as_view(), name='delete_team'),
 
-    path('addBasicData/<int:amount>/', views.AddBasicDataView.as_view(), name='admin_base_data'),  # ADDS BASIC DATA PRE-GENERATED
+    path('addBasicData/<int:amount>/', views.AddBasicDataView.as_view(), name='admin_base_data'),
+    # ADDS BASIC DATA PRE-GENERATED
 
 ]

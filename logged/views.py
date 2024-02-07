@@ -112,6 +112,27 @@ class AddPlayersView(PermissionRequiredMixin, View):
         return render(request, 'add_form.html', {'form': form})
 
 
+class AddTankToPlayerView(PermissionRequiredMixin, View):
+    permission_required = ['players.add_tank']
+
+    def get(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        form = AddTankToPlayerForm()
+        return render(request, 'add_form.html', {'player': player, 'form': form})
+
+    def post(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        form = AddTankToPlayerForm(request.POST)
+        if form.is_valid():
+            tank_id = form.cleaned_data['tank'].id
+            tank = get_object_or_404(Tank, id=tank_id)
+            player.tanks.add(tank)
+            messages.success(request, f'Tank {tank.name} added to player {player.nickname}')
+            return redirect('player_detail', id=id)
+        else:
+            return render(request, 'add_form.html', {'player': player, 'form': form})
+
+
 class AddClansView(PermissionRequiredMixin, View):
     permission_required = ['players.add_clan']
 

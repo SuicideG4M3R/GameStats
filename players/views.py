@@ -107,7 +107,7 @@ class PlayerDetailView(View):
                 'Teams': team_list,
                 'Tanks': tanks,
             }
-            return render(request, 'detail_view.html', {'context': context})
+            return render(request, 'detail_view.html', {'context': context, 'id': id})
         else:
             messages.error(request, f'Player with ID: {id} does not exist')
             return redirect('home')

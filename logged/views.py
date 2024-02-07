@@ -118,6 +118,7 @@ class AddTankToPlayerView(PermissionRequiredMixin, View):
     def get(self, request, id):
         player = get_object_or_404(Player, id=id)
         form = AddTankToPlayerForm()
+
         return render(request, 'add_form.html', {'player': player, 'form': form})
 
     def post(self, request, id):
@@ -126,8 +127,36 @@ class AddTankToPlayerView(PermissionRequiredMixin, View):
         if form.is_valid():
             tank_id = form.cleaned_data['tank'].id
             tank = get_object_or_404(Tank, id=tank_id)
+            if player.tanks.filter(id=tank.id).exists():
+                form.add_error(None, f'Tank {tank.name} already added to player {player.nickname}')
+                return render(request, 'add_form.html', {'player': player, 'form': form})
             player.tanks.add(tank)
             messages.success(request, f'Tank {tank.name} added to player {player.nickname}')
+            return redirect('player_detail', id=id)
+        else:
+            return render(request, 'add_form.html', {'player': player, 'form': form})
+
+
+class DeleteTankFromPlayerView(PermissionRequiredMixin, View):
+    permission_required = ['players.delete_tank']
+
+    def get(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        form = DeleteTankFromPlayerForm()
+        return render(request, 'add_form.html', {'player': player, 'form': form})
+
+    def post(self, request, id):
+        player = get_object_or_404(Player, id=id)
+        form = DeleteTankFromPlayerForm(request.POST)
+        if form.is_valid():
+            tank_id = form.cleaned_data['tank'].id
+            tank = get_object_or_404(Tank, id=tank_id)
+            if player.tanks.filter(id=tank.id).exists():
+                player.tanks.remove(tank)
+                messages.success(request, f'Tank {tank.name} removed from player {player.nickname}')
+            else:
+                form.add_error(None, f'{player.nickname} does not have {tank.name}')
+                return render(request, 'add_form.html', {'player': player, 'form': form})
             return redirect('player_detail', id=id)
         else:
             return render(request, 'add_form.html', {'player': player, 'form': form})
@@ -295,19 +324,23 @@ class EditPlayerView(PermissionRequiredMixin, View):
             return redirect('home')
 
     def post(self, request, id):
-        form = AddPlayersForm(request.POST)
+        form = AddPlayersForm(request.POST, is_edit=True)
         player = get_object_or_404(Player, id=id)
+        context = self.get_context_data(player)
         if form.is_valid():
             nickname = form.cleaned_data['nickname']
             clan = form.cleaned_data['clan']
             player.nickname = nickname
             player.clan = clan
-            player.save()
+            try:
+                player.save()
+            except IntegrityError:
+                form.add_error(None, 'User with that nickname already exists')
+                return render(request, 'edit_form.html', {'form': form, 'context': context})
             messages.success(request,
                              f'Player details updated successfully')
             return redirect('players_list')
         else:
-            context = self.get_context_data(player)
             return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 
@@ -337,19 +370,23 @@ class EditClanView(PermissionRequiredMixin, View):
             return redirect('clans_list')
 
     def post(self, request, id):
-        form = AddClanForm(request.POST)
+        form = AddClanForm(request.POST, is_edit=True)
         clan = get_object_or_404(Clan, id=id)
+        context = self.get_context_data(clan)
         if form.is_valid():
             name = form.cleaned_data['name']
             description = form.cleaned_data['description']
             clan.name = name
             clan.description = description
-            clan.save()
+            try:
+                clan.save()
+            except IntegrityError:
+                form.add_error(None, 'Clan with that name already exists')
+                return render(request, 'edit_form.html', {'form': form, 'context': context})
             messages.success(request,
                              f'Clan details updated successfully')
             return redirect('clans_list')
         else:
-            context = self.get_context_data(clan)
             return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 
@@ -383,8 +420,9 @@ class EditTankView(PermissionRequiredMixin, View):
             return redirect('tanks_list')
 
     def post(self, request, id):
-        form = AddTanksForm(request.POST)
+        form = AddTanksForm(request.POST, is_edit=True)
         tank = get_object_or_404(Tank, id=id)
+        context = self.get_context_data(tank)
         if form.is_valid():
             name = form.cleaned_data['name']
             tier = form.cleaned_data['tier']
@@ -394,12 +432,15 @@ class EditTankView(PermissionRequiredMixin, View):
             tank.tier = tier
             tank.nation = nation
             tank.type = type
-            tank.save()
+            try:
+                tank.save()
+            except IntegrityError:
+                form.add_error(None, 'Tank with that name already exists')
+                return render(request, 'edit_form.html', {'form': form, 'context': context})
             messages.success(request,
                              f'Tank details updated successfully')
             return redirect('tanks_list')
         else:
-            context = self.get_context_data(tank)
             return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 
@@ -409,7 +450,7 @@ class EditTeamView(PermissionRequiredMixin, View):
     def get_context_data(self, team):
         if Team.objects.filter(id=team.id).exists():
             players = []
-            for player in team.players.all():
+            for player in team.players.all().order_by('nickname'):
                 players.append(player.nickname)
             context = {
                 'Team ID': team.id,
@@ -421,7 +462,7 @@ class EditTeamView(PermissionRequiredMixin, View):
     def get(self, request, id):
         if Team.objects.filter(id=id).exists():
             team = Team.objects.get(id=id)
-            players = team.players.all()
+            players = team.players.all().order_by('nickname')
             form = AddTeamsForm(initial={
                 'name': team.name,
                 'player1': players[0],
@@ -437,8 +478,9 @@ class EditTeamView(PermissionRequiredMixin, View):
             return redirect('teams_list')
 
     def post(self, request, id):
-        form = AddTeamsForm(request.POST)
+        form = AddTeamsForm(request.POST, is_edit=True)
         team = get_object_or_404(Team, id=id)
+        context = self.get_context_data(team)
         if form.is_valid():
             name = form.cleaned_data['name']
             player1 = form.cleaned_data['player1']
@@ -449,12 +491,15 @@ class EditTeamView(PermissionRequiredMixin, View):
             team.name = name
             team.players.clear()
             team.players.add(player1, player2, player3, player4, player5)
-            team.save()
+            try:
+                team.save()
+            except IntegrityError:
+                form.add_error(None, 'Team with that name already exists')
+                return render(request, 'edit_form.html', {'form': form, 'context': context})
             messages.success(request,
                              f'Team details updated successfully')
             return redirect('teams_list')
         else:
-            context = self.get_context_data(team)
             return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 

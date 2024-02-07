@@ -117,10 +117,13 @@ class ClanDetailView(View):
     def get(self, request, id):
         if Clan.objects.filter(id=id).exists():
             clan = get_object_or_404(Clan, id=id)
+            players = Player.objects.filter(clan=clan)
+            list_players = [player.nickname for player in players]
             context = {
                 'Clan ID': clan.id,
                 'Name': clan.name,
-                'Description': clan.description
+                'Description': clan.description,
+                'Players': list_players
             }
             return render(request, 'detail_view.html', {'context': context})
         else:
@@ -150,7 +153,7 @@ class TeamDetailView(View):
         if Team.objects.filter(id=id).exists():
             team = get_object_or_404(Team, id=id)
             players = []
-            for player in team.players.all():
+            for player in team.players.all().order_by('nickname'):
                 players.append(player.nickname)
             context = {
                 'Team ID': team.id,

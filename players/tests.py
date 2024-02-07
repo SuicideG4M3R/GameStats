@@ -221,6 +221,54 @@ def test_list_players_view(players):
         assert item in response.context['object_list']
 
 
+@pytest.mark.django_db
+def test_add_tank_to_player_view_get_with_permissions(my_user_with_permissions, player):
+    client = Client()
+    client.force_login(my_user_with_permissions)
+    url = reverse('add_tank_to_player', args=(player.id,))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert 'form' in response.context
+    assert isinstance(response.context['form'], AddTankToPlayerForm)
+
+
+@pytest.mark.django_db
+def test_add_tank_to_player_view_post(my_user_with_permissions, player, tank):
+    client = Client()
+    client.force_login(my_user_with_permissions)
+    url = reverse('add_tank_to_player', args=(player.id,))
+    data = {
+        'tank': tank.id,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert player.tanks.filter(id=tank.id).exists()
+
+
+@pytest.mark.django_db
+def test_delete_tank_from_player_view_get_with_permissions(my_user_with_permissions, player):
+    client = Client()
+    client.force_login(my_user_with_permissions)
+    url = reverse('delete_tank_to_player', args=(player.id,))
+    response = client.get(url)
+    assert response.status_code == 200
+    assert 'form' in response.context
+    assert isinstance(response.context['form'], DeleteTankFromPlayerForm)
+
+
+@pytest.mark.django_db
+def test_delete_tank_from_player_view_post(my_user_with_permissions, player, tank):
+    client = Client()
+    client.force_login(my_user_with_permissions)
+    player.tanks.add(tank)
+    url = reverse('delete_tank_to_player', args=(player.id,))
+    data = {
+        'tank': tank.id,
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert not player.tanks.filter(id=tank.id).exists()
+
 # ##################################### ADD VIEWS #####################################
 
 
@@ -570,17 +618,18 @@ def test_game_edit_view_post(my_superuser, game_result):
     client = Client()
     client.force_login(my_superuser)
     url = reverse('edit_game', args=(game_result.id,))
-    before_winner = game_result.winner_team_id
+    before = game_result.winner_team_id
     data = {
         'team1': game_result.game.team1_id,
         'team2': game_result.game.team2_id,
         'winner': 2
     }
+    assert before != game_result.game.team2_id
     response = client.post(url, data)
     assert response.status_code == 302
-    updated_winner = GameResult.objects.get(id=game_result.id)
-    assert updated_winner.winner_team_id != str(before_winner)
-    assert updated_winner.winner_team_id == 2
+    updated = GameResult.objects.get(id=game_result.id)
+    assert updated.winner_team_id != str(before)
+    assert updated.winner_team_id == game_result.game.team2_id
 
 
 @pytest.mark.django_db

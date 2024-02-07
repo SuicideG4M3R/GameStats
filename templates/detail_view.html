@@ -19,6 +19,7 @@
         <a class="btn btn-danger" href="delete/">Delete</a>
         {% if 'Tanks' in context.keys %}
         <a class="btn btn-success" href="{% url 'add_tank_to_player' id %}">Add Tank</a>
+        <a class="btn btn-danger" href="{% url 'delete_tank_to_player' id %}">Delete Tank</a>
         {% endif %}
         </div>
     </div>

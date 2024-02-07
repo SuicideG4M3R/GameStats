@@ -66,21 +66,27 @@ class AddPlayersForm(forms.Form):
     nickname = forms.CharField(max_length=255)
     clan = forms.ModelChoiceField(queryset=Clan.objects.all(), required=False)
 
+    def __init__(self, *args, **kwargs):
+        self.is_edit = kwargs.pop('is_edit', False)
+        super().__init__(*args, **kwargs)
+
     def clean_nickname(self):
         nickname = self.cleaned_data.get('nickname')
-        if Player.objects.filter(nickname=nickname).exists():
-            raise ValidationError('Player with this nickname already exists')
+        is_edit = getattr(self, 'is_edit', False)
+        if not is_edit:
+            if Player.objects.filter(nickname=nickname).exists():
+                raise ValidationError('Player with this nickname already exists')
         return nickname
 
 
 class AddTankToPlayerForm(forms.Form):
+    form_name = 'Add Tank to the Player'
     tank = forms.ModelChoiceField(queryset=Tank.objects.all(), label='Select Tank')
 
-    def clean_tank(self):
-        tank = self.cleaned_data.get('tank')
-        if Tank.objects.filter(id=tank.id).exists():
-            raise ValidationError('Player already has this tank')
-        return tank
+
+class DeleteTankFromPlayerForm(forms.Form):
+    form_name = 'Delete Tank from the Player'
+    tank = forms.ModelChoiceField(queryset=Tank.objects.all(), label='Select Tank')
 
 
 class AddTanksForm(forms.Form):
@@ -90,10 +96,16 @@ class AddTanksForm(forms.Form):
     nation = forms.ModelChoiceField(queryset=Nation.objects.all(), required=True)
     type = forms.ModelChoiceField(queryset=TankType.objects.all(), required=True)
 
+    def __init__(self, *args, **kwargs):
+        self.is_edit = kwargs.pop('is_edit', False)
+        super().__init__(*args, **kwargs)
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
-        if Tank.objects.filter(name=name).exists():
-            raise ValidationError('Tank with this name already exists')
+        is_edit = getattr(self, 'is_edit', False)
+        if not is_edit:
+            if Tank.objects.filter(name=name).exists():
+                raise ValidationError('Tank with this name already exists')
         return name
 
     def clean_tier(self):
@@ -119,10 +131,16 @@ class AddTeamsForm(forms.Form):
     player4 = forms.ModelChoiceField(queryset=players, label='Player 4')
     player5 = forms.ModelChoiceField(queryset=players, label='Player 5')
 
+    def __init__(self, *args, **kwargs):
+        self.is_edit = kwargs.pop('is_edit', False)
+        super().__init__(*args, **kwargs)
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
-        if Team.objects.filter(name=name).exists():
-            raise ValidationError('Team with this name already exists')
+        is_edit = getattr(self, 'is_edit', False)
+        if not is_edit:
+            if Team.objects.filter(name=name).exists():
+                raise ValidationError('Team with this name already exists')
         return name
 
     def clean(self):
@@ -143,10 +161,16 @@ class AddClanForm(forms.Form):
     name = forms.CharField(max_length=50, min_length=3, required=True)
     description = forms.CharField(max_length=255, required=False, widget=forms.Textarea(attrs={'cols': 40, 'rows': 4}))
 
+    def __init__(self, *args, **kwargs):
+        self.is_edit = kwargs.pop('is_edit', False)
+        super().__init__(*args, **kwargs)
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if len(name) < 3:
             raise ValidationError('Clan name must be at least 3 characters long')
-        if Clan.objects.filter(name=name).exists():
-            raise ValidationError('Clan with this name already exists')
+        is_edit = getattr(self, 'is_edit', False)
+        if not is_edit:
+            if Clan.objects.filter(name=name).exists():
+                raise ValidationError('Clan with this name already exists')
         return name

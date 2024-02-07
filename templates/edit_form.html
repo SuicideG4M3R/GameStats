@@ -1,0 +1,31 @@
+{% extends 'home.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const targetAnchor = document.getElementById('mydata');
+            if (targetAnchor) {
+                targetAnchor.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border">
+            {% for key, value in context.items %}
+                <p>{{ key }}: {{ value }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border">
+            <form method="post">
+                {% csrf_token %}
+                <p><h5 class="text-warning">Edit</h5></p>
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-success">
+                <a class="btn btn-danger" href="{% url 'home' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

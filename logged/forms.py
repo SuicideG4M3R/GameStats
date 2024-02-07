@@ -23,7 +23,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username',]
+        fields = ['username', ]
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -73,6 +73,16 @@ class AddPlayersForm(forms.Form):
         return nickname
 
 
+class AddTankToPlayerForm(forms.Form):
+    tank = forms.ModelChoiceField(queryset=Tank.objects.all(), label='Select Tank')
+
+    def clean_tank(self):
+        tank = self.cleaned_data.get('tank')
+        if Tank.objects.filter(id=tank.id).exists():
+            raise ValidationError('Player already has this tank')
+        return tank
+
+
 class AddTanksForm(forms.Form):
     form_name = 'Add New Tank'
     name = forms.CharField(max_length=255, required=True)
@@ -109,12 +119,10 @@ class AddTeamsForm(forms.Form):
     player4 = forms.ModelChoiceField(queryset=players, label='Player 4')
     player5 = forms.ModelChoiceField(queryset=players, label='Player 5')
 
-    team_name_duplicate_error = 'Team with this name already exists'
-
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if Team.objects.filter(name=name).exists():
-            raise ValidationError(self.team_name_duplicate_error)
+            raise ValidationError('Team with this name already exists')
         return name
 
     def clean(self):
@@ -133,7 +141,7 @@ class AddTeamsForm(forms.Form):
 class AddClanForm(forms.Form):
     form_name = 'Add New Clan'
     name = forms.CharField(max_length=50, min_length=3, required=True)
-    description = forms.CharField(max_length=255, required=False)
+    description = forms.CharField(max_length=255, required=False, widget=forms.Textarea(attrs={'cols': 40, 'rows': 4}))
 
     def clean_name(self):
         name = self.cleaned_data.get('name')

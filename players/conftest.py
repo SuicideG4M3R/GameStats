@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 
 from players.models import *
 
@@ -9,6 +9,20 @@ from players.models import *
 @pytest.fixture
 def my_user():
     return User.objects.create_user(username='Jarosław', password='12345678')
+
+
+@pytest.fixture
+def my_superuser():
+    return User.objects.create_superuser(username='Jarosław', password='12345678')
+
+
+@pytest.fixture
+def my_user_with_permissions():
+    user = User.objects.create_user(username='Jarosław', password='12345678')
+    group = Group.objects.create(name='Group 1')
+    group.permissions.set(Permission.objects.all())
+    user.groups.add(group)
+    return user
 
 
 @pytest.fixture
@@ -66,7 +80,14 @@ def players(clan):
 
 @pytest.fixture
 def team():
-    return Team.objects.create(name='Team1')
+    player1 = Player.objects.create(nickname='Player1')
+    player2 = Player.objects.create(nickname='Player2')
+    player3 = Player.objects.create(nickname='Player3')
+    player4 = Player.objects.create(nickname='Player4')
+    player5 = Player.objects.create(nickname='Player5')
+    team = Team.objects.create(name='Team1')
+    team.players.add(player1, player2, player3, player4, player5)
+    return team
 
 
 @pytest.fixture

@@ -1,14 +1,36 @@
 {% extends 'home.html' %}
+{#{% block main_page %}#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        <p><h5 class="text-warning">{{ form.form_name }}</h5></p>#}
+{#        {{ form.as_p }}#}
+{#        <input type="submit" value="Submit">#}
+{#    </form>#}
+{#{% endblock %}#}
 {% block main_page %}
-    <form method="post">
-        {% csrf_token %}
-        <p><h5 class="text-warning">{{ form.form_name }}</h5></p>
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
-{#    <ul>#}
-{#        {%  for g in groups %}#}
-{#            <li><a href="{% url 'group_permission' g.id %}"> {{ g.name }}</a></li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
+    <p><h3 class="text-warning">{{ form.form_name }}</h3></p>
+    <p> Your form has been generated below this landing page</p>
+{% endblock %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const targetAnchor = document.getElementById('mydata');
+            if (targetAnchor) {
+                targetAnchor.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border">
+            <form method="post">
+                {% csrf_token %}
+                <p><h5 class="text-warning">{{ form.form_name }}</h5></p>
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-outline-success">
+                <a type="submit" href="{% url 'home' %}" class="btn btn-outline-danger">Home</a>
+            </form>
+        </div>
+    </div>
 {% endblock %}

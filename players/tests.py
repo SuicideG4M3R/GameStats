@@ -570,17 +570,18 @@ def test_game_edit_view_post(my_superuser, game_result):
     client = Client()
     client.force_login(my_superuser)
     url = reverse('edit_game', args=(game_result.id,))
-    before_winner = game_result.winner_team_id
+    before = game_result.winner_team_id
     data = {
         'team1': game_result.game.team1_id,
         'team2': game_result.game.team2_id,
         'winner': 2
     }
+    assert before != game_result.game.team2_id
     response = client.post(url, data)
     assert response.status_code == 302
-    updated_winner = GameResult.objects.get(id=game_result.id)
-    assert updated_winner.winner_team_id != str(before_winner)
-    assert updated_winner.winner_team_id == 2
+    updated = GameResult.objects.get(id=game_result.id)
+    assert updated.winner_team_id != str(before)
+    assert updated.winner_team_id == game_result.game.team2_id
 
 
 @pytest.mark.django_db

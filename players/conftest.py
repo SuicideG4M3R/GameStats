@@ -80,7 +80,14 @@ def players(clan):
 
 @pytest.fixture
 def team():
-    return Team.objects.create(name='Team1')
+    player1 = Player.objects.create(nickname='Player1')
+    player2 = Player.objects.create(nickname='Player2')
+    player3 = Player.objects.create(nickname='Player3')
+    player4 = Player.objects.create(nickname='Player4')
+    player5 = Player.objects.create(nickname='Player5')
+    team = Team.objects.create(name='Team1')
+    team.players.add(player1, player2, player3, player4, player5)
+    return team
 
 
 @pytest.fixture

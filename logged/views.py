@@ -180,7 +180,7 @@ class EditGameView(UserPassesTestMixin, View):
 
     def handle_no_permission(self):
         messages.error(self.request, f'Sorry, Only admins can edit game results')
-        return redirect('home')
+        return redirect('games_list')
 
     def get_context_data(self, game):
         game_result = get_object_or_404(GameResult, id=game.id)
@@ -204,6 +204,9 @@ class EditGameView(UserPassesTestMixin, View):
             })
             context = self.get_context_data(game)
             return render(request, 'edit_form.html', {'form': form, 'context': context})
+        else:
+            messages.error(request, f'Game not found')
+            return redirect('games_list')
 
     def post(self, request, id):
         form = AddGamesForm(request.POST)
@@ -225,8 +228,9 @@ class EditGameView(UserPassesTestMixin, View):
             messages.success(request,
                              f'Game details updated successfully')
             return redirect('games_list')
-        context = self.get_context_data(game)
-        return render(request, 'edit_form.html', {'form': form, 'context': context})
+        else:
+            context = self.get_context_data(game)
+            return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 
 class EditPlayerView(PermissionRequiredMixin, View):
@@ -281,8 +285,9 @@ class EditPlayerView(PermissionRequiredMixin, View):
             messages.success(request,
                              f'Player details updated successfully')
             return redirect('players_list')
-        context = self.get_context_data(player)
-        return render(request, 'edit_form.html', {'form': form, 'context': context})
+        else:
+            context = self.get_context_data(player)
+            return render(request, 'edit_form.html', {'form': form, 'context': context})
 
 
 class EditClanView(PermissionRequiredMixin, View):
@@ -438,7 +443,7 @@ class DeleteGameView(UserPassesTestMixin, View):
 
     def handle_no_permission(self):
         messages.error(self.request, f'Sorry, Only admins can delete game results')
-        return redirect('home')
+        return redirect('games_list')
 
     def get(self, request, id):
         if Game.objects.filter(id=id).exists():

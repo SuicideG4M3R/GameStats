@@ -1,0 +1,26 @@
+{% extends 'home.html' %}
+{% block content %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const targetAnchor = document.getElementById('mydata');
+            if (targetAnchor) {
+                targetAnchor.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    </script>
+    <div class="container my-5 d-grid gap-5">
+        <div class="p-5 border">
+            {% for key, value in context.items %}
+                <p>{{ key }}: {{ value }}</p>
+            {% endfor %}
+        <a class="btn btn-primary" href="edit/">Edit</a>
+        <a class="btn btn-danger" href="delete/">Delete</a>
+        {% if 'Tanks' in context.keys %}
+        <a class="btn btn-success" href="{% url 'add_tank_to_player' id %}">Add Tank</a>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

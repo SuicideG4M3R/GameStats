@@ -4,7 +4,7 @@
             {% if user.is_authenticated %} Hello  {{ user.username }}  !
                 <a class="navbar-brand text-warning " style="margin: 0 40px" href="{% url 'logout' %}">Logout</a>
                 {% if user.is_superuser %}
-                <a class="navbar-brand text-warning " href="#">Administrate</a>
+                <a class="navbar-brand text-warning " href="/admin/">Administrate</a>
                 {% endif %}
             {% else %}
                 <a class="navbar-brand text-warning" href="{% url 'login' %}">Login</a>

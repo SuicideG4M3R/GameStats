@@ -76,12 +76,6 @@ class AddPlayersForm(forms.Form):
 class AddTankToPlayerForm(forms.Form):
     tank = forms.ModelChoiceField(queryset=Tank.objects.all(), label='Select Tank')
 
-    def clean_tank(self):
-        tank = self.cleaned_data.get('tank')
-        if Tank.objects.filter(id=tank.id).exists():
-            raise ValidationError('Player already has this tank')
-        return tank
-
 
 class AddTanksForm(forms.Form):
     form_name = 'Add New Tank'

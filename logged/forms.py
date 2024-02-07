@@ -23,7 +23,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username',]
+        fields = ['username', ]
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
         }
@@ -71,6 +71,16 @@ class AddPlayersForm(forms.Form):
         if Player.objects.filter(nickname=nickname).exists():
             raise ValidationError('Player with this nickname already exists')
         return nickname
+
+
+class AddTankToPlayerForm(forms.Form):
+    tank = forms.ModelChoiceField(queryset=Tank.objects.all(), label='Select Tank')
+
+    def clean_tank(self):
+        tank = self.cleaned_data.get('tank')
+        if Tank.objects.filter(id=tank.id).exists():
+            raise ValidationError('Player already has this tank')
+        return tank
 
 
 class AddTanksForm(forms.Form):

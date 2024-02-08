@@ -184,6 +184,21 @@ class AddTanksView(PermissionRequiredMixin, View):
     permission_required = ['players.add_tank']
 
     def get(self, request):
+        if Nation.objects.all().count() == 0:
+            nations = [
+                'USSR (Russia)', 'Germany', 'USA', 'United Kingdom', 'France', 'Japan', 'Italy', 'China', 'Poland',
+                'Sweden', 'Czechoslovakia', 'Israel', 'India', 'South Korea', 'Turkey', 'Pakistan', 'Egypt', 'Iraq',
+                'Iran', 'Finland', 'Romania', 'Yugoslavia', 'Switzerland', 'Canada', 'Australia', 'Brazil',
+                'Argentina', 'Austria', 'Belgium', 'Spain'
+            ]
+            for nation in nations:
+                Nation.objects.create(name=nation)
+        if TankType.objects.all().count() == 0:
+            tank_types = [
+                "Light Tank", "Medium Tank", "Heavy Tank", "Tank Destroyer", "Artillery"
+            ]
+            for tank_type in tank_types:
+                TankType.objects.create(name=tank_type)
         form = AddTanksForm()
         return render(request, 'add_form.html', {'form': form})
 

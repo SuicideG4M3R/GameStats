@@ -44,8 +44,10 @@ class RegisterForm(forms.ModelForm):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise ValidationError('Username already exists.')
-        if len(username) < 8 or len(username) > 150:
-            raise ValidationError('Username must be between 8 and 150 characters long.')
+        if len(username) < 8:
+            raise ValidationError('Username must be at least 8 characters long.')
+        if len(username) > 150:
+            raise ValidationError('Username is too long (max.150).')
         return username
 
 

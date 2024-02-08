@@ -1,12 +1,4 @@
 {% extends 'home.html' %}
-{#{% block main_page %}#}
-{#    <form method="post">#}
-{#        {% csrf_token %}#}
-{#        <p><h5 class="text-warning">{{ form.form_name }}</h5></p>#}
-{#        {{ form.as_p }}#}
-{#        <input type="submit" value="Submit">#}
-{#    </form>#}
-{#{% endblock %}#}
 {% block main_page %}
     <p><h3 class="text-warning">{{ form.form_name }}</h3></p>
     <p> Your form has been generated below this landing page</p>
@@ -29,7 +21,7 @@
                 <p><h5 class="text-warning">{{ form.form_name }}</h5></p>
                 {{ form.as_p }}
                 <input type="submit" value="Submit" class="btn btn-outline-success">
-                <a type="submit" href="{% url 'home' %}" class="btn btn-outline-danger">Home</a>
+                <a type="submit" onclick="history.go(-1);" class="btn btn-outline-danger">Return</a>
             </form>
         </div>
     </div>

@@ -90,16 +90,16 @@ def test_register_view_post_first_superuser():
     client = Client()
     url = reverse('register')
     data = {
-        'username': 'test',
+        'username': 'testtest',
         'password': 'testtest',
         'password2': 'testtest',
     }
     response = client.post(url, data)
     assert response.status_code == 302
-    assert User.objects.filter(username='test').exists()
+    assert User.objects.filter(username='testtest').exists()
     assert not Group.objects.filter(name='New user').exists()
-    assert User.objects.get(username='test').is_authenticated
-    assert User.objects.get(username='test').is_superuser
+    assert User.objects.get(username='testtest').is_authenticated
+    assert User.objects.get(username='testtest').is_superuser
 
 
 @pytest.mark.django_db
@@ -107,15 +107,15 @@ def test_register_view_post_second_register(my_user):
     client = Client()
     url = reverse('register')
     data = {
-        'username': 'test2',
+        'username': 'test2test',
         'password': 'test2test2',
         'password2': 'test2test2',
     }
     response = client.post(url, data)
     assert response.status_code == 302
     assert Group.objects.filter(name='New user').exists()
-    assert User.objects.filter(username='test2').exists()
-    assert User.objects.get(username='test2').is_authenticated
+    assert User.objects.filter(username='test2test').exists()
+    assert User.objects.get(username='test2test').is_authenticated
 
 
 # ##################################### LIST VIEWS #####################################
@@ -268,6 +268,7 @@ def test_delete_tank_from_player_view_post(my_user_with_permissions, player, tan
     response = client.post(url, data)
     assert response.status_code == 302
     assert not player.tanks.filter(id=tank.id).exists()
+
 
 # ##################################### ADD VIEWS #####################################
 
@@ -429,6 +430,8 @@ def test_add_tank_view_get_with_permissions(my_user_with_permissions):
     assert response.status_code == 200
     assert 'form' in response.context
     assert isinstance(response.context['form'], AddTanksForm)
+    assert Nation.objects.count() == 30
+    assert TankType.objects.count() == 5
 
 
 @pytest.mark.django_db
@@ -914,10 +917,10 @@ def test_special_superuser_basedata_generator_view(my_superuser):
     response = client.get(url)
     assert response.status_code == 302
     assert Clan.objects.all().count() == amount
-    assert Nation.objects.all().count() == amount
+    assert Nation.objects.all().count() == 30
     assert Tank.objects.all().count() == amount
     assert Team.objects.all().count() == amount * 2
-    assert TankType.objects.all().count() == amount
+    assert TankType.objects.all().count() == 5
     assert Player.objects.all().count() == amount * 10
     assert Game.objects.all().count() == amount
     assert GameResult.objects.all().count() == amount

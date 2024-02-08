@@ -184,6 +184,21 @@ class AddTanksView(PermissionRequiredMixin, View):
     permission_required = ['players.add_tank']
 
     def get(self, request):
+        if Nation.objects.all().count() == 0:
+            nations = [
+                'USSR (Russia)', 'Germany', 'USA', 'United Kingdom', 'France', 'Japan', 'Italy', 'China', 'Poland',
+                'Sweden', 'Czechoslovakia', 'Israel', 'India', 'South Korea', 'Turkey', 'Pakistan', 'Egypt', 'Iraq',
+                'Iran', 'Finland', 'Romania', 'Yugoslavia', 'Switzerland', 'Canada', 'Australia', 'Brazil',
+                'Argentina', 'Austria', 'Belgium', 'Spain'
+            ]
+            for nation in nations:
+                Nation.objects.create(name=nation)
+        if TankType.objects.all().count() == 0:
+            tank_types = [
+                "Light Tank", "Medium Tank", "Heavy Tank", "Tank Destroyer", "Artillery"
+            ]
+            for tank_type in tank_types:
+                TankType.objects.create(name=tank_type)
         form = AddTanksForm()
         return render(request, 'add_form.html', {'form': form})
 
@@ -591,6 +606,21 @@ class AddBasicDataView(UserPassesTestMixin, View):
         counter = 1
         cycle = 0
         while amount > cycle:
+            nations = [
+                'USSR (Russia)', 'Germany', 'USA', 'United Kingdom', 'France', 'Japan', 'Italy', 'China', 'Poland',
+                'Sweden', 'Czechoslovakia', 'Israel', 'India', 'South Korea', 'Turkey', 'Pakistan', 'Egypt', 'Iraq',
+                'Iran', 'Finland', 'Romania', 'Yugoslavia', 'Switzerland', 'Canada', 'Australia', 'Brazil',
+                'Argentina', 'Austria', 'Belgium', 'Spain'
+            ]
+            tank_types = [
+                "Light Tank", "Medium Tank", "Heavy Tank", "Tank Destroyer", "Artillery"
+            ]
+            if Nation.objects.all().count() == 0:
+                for nation in nations:
+                    Nation.objects.create(name=nation)
+            if TankType.objects.all().count() == 0:
+                for tank_type in tank_types:
+                    TankType.objects.create(name=tank_type)
             if Clan.objects.filter(name=f'Basic Clan {counter}').exists():
                 counter += 1
             else:
@@ -609,8 +639,8 @@ class AddBasicDataView(UserPassesTestMixin, View):
                     player15 = Player.objects.create(nickname=f'Basic PlayerJ {counter}', clan_id=clan.id)
                     team1 = Team.objects.create(name=f'Basic TeamA {counter}')
                     team2 = Team.objects.create(name=f'Basic TeamB {counter}')
-                    tank_type = TankType.objects.create(name=f'Basic Tank Type {counter}')
-                    nation = Nation.objects.create(name=f'Basic Nation {counter}')
+                    tank_type = TankType.objects.order_by('?').first()
+                    nation = Nation.objects.order_by('?').first()
                     tank = Tank.objects.create(name=f'Basic Tank {counter}', nation_id=nation.id,
                                                type_id=tank_type.id, tier=random.randint(1, 10))
 

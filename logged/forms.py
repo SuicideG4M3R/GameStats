@@ -34,14 +34,18 @@ class RegisterForm(forms.ModelForm):
         password2 = cleaned_data.get('password2')
         if password is None or password2 is None or password != password2:
             raise ValidationError('Passwords do not match.')
-        if len(password) < 8 or 8 > len(password2):
+        if len(password) < 8:
             raise ValidationError('Password must be at least 8 characters long.')
+        if len(password) > 128:
+            raise ValidationError('Password is too long (max.128).')
         return cleaned_data
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
         if User.objects.filter(username=username).exists():
             raise ValidationError('Username already exists.')
+        if len(username) < 8 or len(username) > 150:
+            raise ValidationError('Username must be between 8 and 150 characters long.')
         return username
 
 

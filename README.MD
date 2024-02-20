@@ -5,14 +5,14 @@ Main idea of the project was to create where you can keep track of statistics.
 #### you can find there:
 **Full CRUD**\
 
-**Models:** Player, Tank, Team, Clan, Game, and few others.\
+**Models:** Player, Tank, Team, Clan, Game, and few others.
 
-**Visually okay site**(mainly boostrap with some editing)\
+**Visually okay site**(mainly boostrap with some editing)
 
 **Registering**, you can create user and\
 be added automatically to the group called "New User""
 upon creating second user,\
-first created user will be **Super user**!\
+first created user will be **Super user**!
 
 **Permissions**, since here I had no idea for the permissions, I made one group\
 which has all the permissions and but aren't allowed to some things like:\

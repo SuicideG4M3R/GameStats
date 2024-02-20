@@ -3,7 +3,7 @@
 I'm happy to  present you with my first project.\
 Main idea of the project was to create where you can keep track of statistics.
 #### you can find there:
-**Full CRUD**\
+**Full CRUD**
 
 **Models:** Player, Tank, Team, Clan, Game, and few others.
 
